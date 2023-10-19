@@ -4,8 +4,19 @@ Basic react and express app to deploy on render.com as docker image.
 
 ### Requirement
 
-- [Render](https://render.com) profile
-- [Docker](https://hub.docker.com) profile
+Create these branches: `master`, `stage`, `prod`
+
+[Render](https://render.com) profile
+
+| email             | method | Service | Image      |
+| ----------------- | ------ | ------- | ---------- |
+| example@gmail.com | email  | Docker  | prof/image |
+
+[Docker](https://hub.docker.com) profile
+
+| username | method |
+| -------- | ------ |
+| admin123 | email  |
 
 ### Repository Env
 
