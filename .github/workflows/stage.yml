@@ -16,7 +16,7 @@ jobs:
 
   client-test:
     needs: merge_check
-    if: needs.merge_check.outputs.merged == 'true'
+    if: needs.merge_check.outputs.merged == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     env:
       CI: true # for non-watch test mode
