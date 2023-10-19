@@ -2,6 +2,11 @@
 
 Basic react and express app to deploy on render.com as docker image.
 
+### Requirement
+
+- [Render](https://render.com) profile
+- [Docker](https://hub.docker.com) profile
+
 ### Repository Env
 
 - RENDER_SERVER_HOST_URL: `https://abc-xyz.onrender.com`
@@ -22,17 +27,3 @@ Basic react and express app to deploy on render.com as docker image.
 ### Todo
 
 - Improve the app workflows
-
-<!--
-
-### Fly deplyment via cli
-
-https://fly.io/docs/hands-on/install-flyctl/
-
-docker run -it 3565a89d9e81 bash
-curl -L https://fly.io/install.sh | sh
-
-export FLYCTL_INSTALL=\"$flyctl_install\"
-export PATH=\"\$FLYCTL_INSTALL/bin:\$PATH\"
-export FLY_API_TOKEN=fo1_7mXDasFuDfeHCQTGbBaWw-PEIzx4Q7UiW1M7794XcUo
--->
