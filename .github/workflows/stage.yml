@@ -63,7 +63,7 @@ jobs:
       - name: Run the docker image locally
         run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
       - name: Calling the api
-        run: curl http://localhost:8080/api
+        run: curl http://localhost:${{ env.PORT }}/api
   uploading-docker-image:
     needs: [dockerize]
     runs-on: ubuntu-latest
