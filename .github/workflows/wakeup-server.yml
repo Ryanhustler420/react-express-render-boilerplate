@@ -1,8 +1,8 @@
 name: Wakeup Server (Cron)
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/12 * * * *" # Runs the job every 12 minutes
+  # schedule:
+  #   - cron: "*/12 * * * *" # Runs the job every 12 minutes
 jobs:
   request:
     runs-on: ubuntu-latest

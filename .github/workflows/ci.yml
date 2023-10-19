@@ -1,9 +1,10 @@
 name: CI
+env: { PORT: 8080, Group: CI }
 on:
   workflow_dispatch:
   push:
-env:
-  PORT: 8080
+    branches:
+      - "feature-*"
 jobs:
   client-test:
     runs-on: ubuntu-latest
