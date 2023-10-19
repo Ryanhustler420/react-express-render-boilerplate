@@ -59,9 +59,9 @@ jobs:
       - name: 🐟 Building docker image
         run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
       - name: Run the docker image locally
-        run: docker run -d -p 3000:3000 ${{ secrets.DOCKER_IMAGE_NAME }}
+        run: docker run -d -p 8080:8080 ${{ secrets.DOCKER_IMAGE_NAME }}
       - name: Calling the api
-        run: curl http://localhost:3000/api
+        run: curl http://localhost:8080/api
   uploading-docker-image:
     needs: [dockerize]
     runs-on: ubuntu-latest
