@@ -1,0 +1,95 @@
+name: Stage
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - closed
+jobs:
+  client-test:
+    runs-on: ubuntu-latest
+    env:
+      CI: true # for non-watch test mode
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: ⚙️ Install dependencies
+        run: cd client && npm install
+      - name: 🧪 Test
+        run: npm run test --prefix client
+  client-build:
+    needs: [client-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: ⚙️ Install dependencies
+        run: cd client && npm install
+      - name: Build
+        run: npm run build --prefix client
+  server-test:
+    needs: [client-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: ⚙️ Install dependencies
+        run: npm install
+      - name: Test
+        run: npm run test:ci
+  server-build:
+    needs: [server-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: ⚙️ Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+  dockerize:
+    needs: [server-test, client-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: 👤 Build client
+        run: npm run build --prefix client
+      - name: 💿 Build Server
+        run: npm run build
+      - name: 🐟 Building docker image
+        run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
+      - name: Run the docker image locally
+        run: docker run -d -p 3000:3000 ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: Calling the api
+        run: curl http://localhost:3000/api
+  uploading-docker-image:
+    needs: [dockerize]
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Get the code
+        uses: actions/checkout@v3
+      - name: 👤 Build client
+        run: npm run build --prefix client
+      - name: 💿 Build Server
+        run: npm run build
+      - name: 🐟 Building docker image
+        run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
+      - name: Run the docker image locally
+        run: docker run -d -p 3000:3000 ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: Calling the api
+        run: curl http://localhost:3000/api
+      - name: Docker login
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push image to docker
+        run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: Deploy Trigger
+        id: render-deployer
+        uses: OneHox/render-deploy-api@v1.0.0
+        with:
+          serviceId: ${{ secrets.RENDER_APP_SERVICE_ID }}
+          bearer: ${{ secrets.RENDER_PROFILE_AUTH_API_TOKEN }}
+      - name: Message
+        run: echo "${{ steps.render-deployer.outputs.response }}"
