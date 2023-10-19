@@ -64,5 +64,7 @@ jobs:
         run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
       - name: Run the docker image locally
         run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
+      - name: Sleep for 1 minute
+        run: sleep 60
       - name: Calling the api
         run: curl http://localhost:${{ env.PORT }}/api
