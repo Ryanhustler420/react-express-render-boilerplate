@@ -4,6 +4,8 @@ on:
   pull_request:
     types:
       - closed
+env:
+  PORT: 8080
 jobs:
   client-test:
     runs-on: ubuntu-latest
@@ -59,7 +61,7 @@ jobs:
       - name: 🐟 Building docker image
         run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
       - name: Run the docker image locally
-        run: docker run -d -p 8080:8080 ${{ secrets.DOCKER_IMAGE_NAME }}
+        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
       - name: Calling the api
         run: curl http://localhost:8080/api
   uploading-docker-image:
@@ -79,9 +81,9 @@ jobs:
       - name: 🐟 Building docker image
         run: docker build -t ${{ secrets.DOCKER_IMAGE_NAME }} .
       - name: Run the docker image locally
-        run: docker run -d -p 3000:3000 ${{ secrets.DOCKER_IMAGE_NAME }}
+        run: docker run -d -p ${{ env.PORT }}:${{ env.PORT }} ${{ secrets.DOCKER_IMAGE_NAME }}
       - name: Calling the api
-        run: curl http://localhost:3000/api
+        run: curl http://localhost:${{ env.PORT }}/api
       - name: Docker login
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:

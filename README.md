@@ -23,15 +23,6 @@ Basic react and express app to deploy on render.com as docker image.
 
 - Improve the app workflows
 
-// add prisma on remix apps
-
-mailgun-mailer[reactjs]
-xcodeclazz-socket-sharecode[reactjs]
-xcodeclazz-socket-certificate[reactjs][private]
-xcodeclazz-assets-cloudinary[reactjs][private]
-
-check if image can store file data inside after building the image
-
 <!--
 
 ### Fly deplyment via cli
